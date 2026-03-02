@@ -39,7 +39,7 @@ npm run example
 ### Web
 
 - **Develop**: Open `web/index.html` in a browser.
-- **Build for deploy**: `npm run build-web` → copies `web/index.html` and `web/main.js` to **`dist/`**. Serve or publish the `dist/` folder (e.g. GitHub Pages, static host).
+- **Build for deploy**: `npm run build-web` → copies `web/index.html` and `web/main.js` to **`docs/`**. Use the `docs/` folder as the source for GitHub Pages.
 
 ## Project structure
 
@@ -48,7 +48,7 @@ npm run example
 | `src/core/braille.js` | Braille encoding (letters + number sign + digits), layout, geometry (JSCad). |
 | `src/cli/braille.js` | CLI: `--text` or `--input` JSON → STL. |
 | `web/index.html`, `web/main.js` | Browser UI; no deps, outputs STL in-browser. |
-| `tools/build_web.js` | Copies web assets to `dist/`. |
+| `tools/build_web.js` | Copies web assets to `docs/` (for GitHub Pages). |
 | `example.js` | Runs 3 example texts → `output/*.stl`. |
 | `labels.example.json` | Sample JSON array for batch. |
 

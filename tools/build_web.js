@@ -15,9 +15,9 @@ async function copyFileRelative(from, toDir) {
 }
 
 async function main() {
-  await copyFileRelative("web/index.html", "dist");
-  await copyFileRelative("web/main.js", "dist");
-  console.log("Web assets copied to dist/.");
+  await copyFileRelative("web/index.html", "docs");
+  await copyFileRelative("web/main.js", "docs");
+  console.log("Web assets copied to docs/. Use docs/ for GitHub Pages.");
 }
 
 main().catch((error) => {
