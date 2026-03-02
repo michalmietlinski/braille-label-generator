@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Braille Label Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg-light: radial-gradient(circle at top, #e5e7eb 0, #f9fafb 45%, #e5e7eb 100%);
+        --bg-dark: radial-gradient(circle at top, #020617 0, #020617 45%, #020617 100%);
+        --card-bg-light: rgba(255, 255, 255, 0.85);
+        --card-bg-dark: rgba(15, 23, 42, 0.9);
+        --border-light: rgba(148, 163, 184, 0.9);
+        --border-dark: rgba(30, 64, 175, 0.9);
+        --link-light: #2563eb;
+        --link-dark: #60a5fa;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg-light);
+        color: #020617;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: var(--bg-dark);
+          color: #e5e7eb;
+        }
+      }
+
+      .page {
+        width: 100%;
+        max-width: 960px;
+        padding: 32px 20px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      header {
+        text-align: left;
+      }
+
+      h1 {
+        margin: 0 0 4px;
+        font-size: 1.9rem;
+        letter-spacing: 0.02em;
+      }
+
+      .subheading {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #4b5563;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .subheading {
+          color: #9ca3af;
+        }
+      }
+
+      main.layout {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+        gap: 20px;
+      }
+
+      @media (max-width: 800px) {
+        main.layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .card {
+        background: var(--card-bg-light);
+        border-radius: 18px;
+        padding: 18px 18px 20px;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        backdrop-filter: blur(18px);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .card {
+          background: var(--card-bg-dark);
+          border-color: rgba(30, 64, 175, 0.7);
+          box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
+        }
+      }
+
+      .card-title {
+        margin: 0 0 10px;
+        font-size: 1.1rem;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .field-group {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .field-group-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.82rem;
+      }
+
+      .label-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 6px;
+      }
+
+      .label-main {
+        font-weight: 500;
+      }
+
+      .label-hint {
+        font-size: 0.75rem;
+        color: #6b7280;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .label-hint {
+          color: #9ca3af;
+        }
+      }
+
+      input[type="number"],
+      select {
+        padding: 6px 8px;
+        font-size: 0.86rem;
+        border-radius: 999px;
+        border: 1px solid var(--border-light);
+        background: rgba(15, 23, 42, 0.02);
+        color: inherit;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        input[type="number"],
+        select {
+          background: rgba(15, 23, 42, 0.95);
+          border-color: var(--border-dark);
+        }
+      }
+
+      input[type="number"]:focus,
+      select:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3);
+      }
+
+      .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.82rem;
+      }
+
+      .checkbox-row input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+      }
+
+      button[type="submit"] {
+        margin-top: 4px;
+        align-self: flex-start;
+        padding: 7px 16px;
+        font-size: 0.9rem;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        background: linear-gradient(135deg, #2563eb, #4f46e5);
+        color: #f9fafb;
+        font-weight: 500;
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+      }
+
+      button[type="submit"]:hover {
+        filter: brightness(1.05);
+      }
+
+      button[type="submit"]:active {
+        transform: translateY(1px);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+      }
+
+      #status {
+        margin-top: 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        padding: 10px 12px;
+        font-size: 0.82rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        #status {
+          border-color: rgba(30, 64, 175, 0.7);
+        }
+      }
+
+      .status-label {
+        font-weight: 600;
+        margin-bottom: 4px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #6b7280;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .status-label {
+          color: #9ca3af;
+        }
+      }
+
+      .status-body {
+        white-space: pre-line;
+      }
+
+      aside .sidebar-title {
+        margin: 0 0 8px;
+        font-size: 0.98rem;
+        font-weight: 600;
+      }
+
+      .sidebar-text {
+        font-size: 0.84rem;
+        margin: 0 0 10px;
+        color: #4b5563;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .sidebar-text {
+          color: #9ca3af;
+        }
+      }
+
+      .sidebar-list,
+      .links-list {
+        margin: 0 0 8px;
+        padding-left: 18px;
+        font-size: 0.82rem;
+      }
+
+      .sidebar-list li + li,
+      .links-list li + li {
+        margin-top: 3px;
+      }
+
+      a {
+        color: var(--link-light);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        a {
+          color: var(--link-dark);
+        }
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <h1>Braille Label Generator</h1>
+        <p class="subheading">
+          Generate braille labels for 3D printing or other uses. Enter text and download the result (e.g. STL).
+        </p>
+      </header>
+
+      <main class="layout">
+        <section class="card">
+          <h2 class="card-title">Generator</h2>
+          <form id="braille-form">
+            <label>
+              <span class="label-main">Text (line breaks allowed)</span>
+              <span class="label-hint">A–Z, a–z, 0–9 (number sign), space</span>
+              <textarea id="brailleText" rows="4" style="width:100%; padding:8px; border-radius:8px; resize:vertical;">Hello
+World</textarea>
+            </label>
+
+            <label>
+              <span class="label-main">Label thickness (mm)</span>
+              <span class="label-hint">Base plate height</span>
+              <input id="labelThickness" type="number" step="0.1" min="0.5" value="2" />
+            </label>
+
+            <div class="field-group">
+              <label>
+                <span class="label-main">Cell height (mm)</span>
+                <span class="label-hint">Per line; width = height × 2/3 (standard)</span>
+                <input id="cellHeight" type="number" step="0.1" min="2" value="10" />
+              </label>
+            </div>
+
+            <label>
+              <span class="label-main">Padding (mm)</span>
+              <span class="label-hint">Margin around text</span>
+              <input id="padding" type="number" step="0.1" min="0" value="2" />
+            </label>
+
+            <label>
+              <span class="label-main">Line spacing (mm)</span>
+              <span class="label-hint">Gap between lines</span>
+              <input id="lineSpacing" type="number" step="0.1" min="0" value="0" />
+            </label>
+
+            <label>
+              <span class="label-main">Dot diameter (mm)</span>
+              <span class="label-hint">Leave empty for auto (from cell size)</span>
+              <input id="dotDiameter" type="number" step="0.1" min="0.5" placeholder="auto" />
+            </label>
+
+            <button type="submit">Generate STL</button>
+
+            <div id="status">
+              <div class="status-label">Output</div>
+              <div class="status-body">
+                Enter text and options, then click Generate STL. A .stl file will be downloaded.
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <aside class="card">
+          <h2 class="sidebar-title">Tips</h2>
+          <p class="sidebar-text">
+            This browser version generates a single label using the same parameter model as the CLI. For batch generation, use the Node CLI.
+          </p>
+          <ul class="sidebar-list">
+            <li>Enter the text you want in braille; adjust size and options as needed.</li>
+            <li>Export as STL for 3D printing or other formats if supported.</li>
+          </ul>
+
+          <h3 class="sidebar-title">Links</h3>
+          <ul class="links-list">
+            <li>
+              <a href="https://github.com/michalmietlinski/braille-label-generator" target="_blank" rel="noreferrer">
+                GitHub: braille-label-generator
+              </a>
+            </li>
+          </ul>
+
+          <h3 class="sidebar-title">Printing</h3>
+          <ul class="sidebar-list">
+            <li>Layer height: 0.2–0.28 mm.</li>
+            <li>Print with a flat base for stability.</li>
+          </ul>
+        </aside>
+      </main>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Don't include description
+DESCRIPTION.md
+
+# Don't include output, except output/brands
+output/*
+!output/brands/
+!output/brands/**
+
+# OS and editor
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Env
+.env
+.env.local
+.env.*.local

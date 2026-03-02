@@ -1,0 +1,15 @@
+{
+  "name": "braille-label-generator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "braille": "node src/cli/braille.js",
+    "example": "node example.js",
+    "build-web": "node tools/build_web.js"
+  },
+  "dependencies": {
+    "@jscad/modeling": "^2.13.0",
+    "@jscad/stl-serializer": "^2.1.23"
+  }
+}

@@ -1,0 +1,16 @@
+[
+  "Hello",
+  "Line one\nLine two",
+  {
+    "text": "Room 42",
+    "output": "room-42.stl",
+    "name": "room-42"
+  },
+  {
+    "text": "Big label\nNumbers 0 1 2",
+    "output": "big.stl",
+    "cellHeight": 12,
+    "padding": 3,
+    "lineSpacing": 2
+  }
+]
