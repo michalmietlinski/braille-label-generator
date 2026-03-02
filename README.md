@@ -1,12 +1,12 @@
 # Braille Label Generator
 
-Generate **braille labels** as 3D models (STL) for printing: a **rectangular flat base** with **semi-sphere dots** for each braille character. Supports **multi-line text** (line breaks), configurable thickness, cell size, padding, and dot size.
+Generate **braille labels** as 3D models (STL) for printing: a flat rectangular base with **hemisphere dots** for each character. Supports multi-line text, numbers (with number sign), and configurable size and spacing.
 
 ## Features
 
-- **Text input**: A–Z, a–z, 0–9 (with number sign), spaces; **line breaks** create new lines.
-- **Output**: One STL = flat rectangular plate + hemisphere dots on top.
-- **Parameters**: Label thickness, **cell height** (cell width follows standard 2:3 ratio), padding, line spacing, dot diameter (or auto).
+- **Text**: A–Z, a–z, 0–9 (number sign + digit), spaces; **line breaks** = new lines.
+- **Output**: One STL = rectangular plate + dome dots on top (hemispheres, not full spheres).
+- **Params**: Label thickness, cell height (width = height × 2/3), padding, line spacing, dot diameter (optional).
 
 ## Setup
 
@@ -16,33 +16,41 @@ npm install
 
 ## Usage
 
-### CLI (Node)
+### CLI
 
 **Single label:**
 ```bash
 npm run braille -- --text "Hello" --output output/label.stl
-npm run braille -- --text "Line one\nLine two" --thickness 2 --padding 3 --output output/label.stl
+npm run braille -- --text "Line one\nLine two" --thickness 2 --padding 3
 ```
 
-**Batch from JSON array:**
+**Batch from JSON:**
 ```bash
 npm run braille -- --input labels.json [--output-dir output]
 ```
 
-The JSON file must be an array. Each element is either a string (the text) or an object with `"text"` and optional `"output"`, `"name"`, and label params (`labelThickness`, `cellHeight`, `padding`, `lineSpacing`, `dotDiameter`). See `labels.example.json` for a sample.
+JSON = array of strings (text) or objects with `"text"` and optional `"output"`, `"name"`, `labelThickness`, `cellHeight`, `padding`, `lineSpacing`, `dotDiameter`. Example: `labels.example.json`.
 
-Options: `--text`, `--input`, `--output`, `--output-dir`, `--name`, `--thickness`, `--cell-height`, `--padding`, `--line-spacing`, `--dot-diameter`. Run with `--help` for full list.
+**Examples (generates 3 STLs to output/):**
+```bash
+npm run example
+```
 
 ### Web
 
-Open **`web/index.html`** in a browser. Enter text (with line breaks), set thickness, cell size, padding, and optional dot diameter, then click **Generate STL**.  
-To publish: `npm run build-web` and use the `docs/` folder (e.g. GitHub Pages).
+- **Develop**: Open `web/index.html` in a browser.
+- **Build for deploy**: `npm run build-web` → copies `web/index.html` and `web/main.js` to **`dist/`**. Serve or publish the `dist/` folder (e.g. GitHub Pages, static host).
 
 ## Project structure
 
-- **`src/core/braille.js`** – Braille encoding, layout, and geometry (JSCad); used by CLI.
-- **`src/cli/braille.js`** – CLI for text + params → STL.
-- **`web/index.html`** + **`web/main.js`** – Browser UI and dependency-free STL generation.
+| Path | Description |
+|------|-------------|
+| `src/core/braille.js` | Braille encoding (letters + number sign + digits), layout, geometry (JSCad). |
+| `src/cli/braille.js` | CLI: `--text` or `--input` JSON → STL. |
+| `web/index.html`, `web/main.js` | Browser UI; no deps, outputs STL in-browser. |
+| `tools/build_web.js` | Copies web assets to `dist/`. |
+| `example.js` | Runs 3 example texts → `output/*.stl`. |
+| `labels.example.json` | Sample JSON array for batch. |
 
 ## License
 
