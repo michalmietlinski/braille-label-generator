@@ -2,6 +2,10 @@
 
 Generate **braille labels** as 3D models (STL) for printing: a flat rectangular base with **hemisphere dots** for each character. Supports multi-line text, numbers (with number sign), and configurable size and spacing.
 
+HTML generator:
+You can use our html single label generator:
+https://michalmietlinski.github.io/braille-label-generator/
+
 ## Features
 
 - **Text**: A–Z, a–z, 0–9 (number sign + digit), spaces; **line breaks** = new lines.
